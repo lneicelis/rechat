@@ -1,0 +1,24 @@
+{
+  "name": "chat",
+  "version": "0.1.0",
+  "description": "Stand alone chat module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "chat",
+    "realtime",
+    "messages",
+    "socket",
+    "node",
+    "rethink"
+  ],
+  "author": "Lukas Neicelis",
+  "license": "MIT",
+  "dependencies": {
+    "koa": "^0.20.0",
+    "lodash": "^3.8.0",
+    "rethinkdbdash": "^2.0.9"
+  }
+}
