@@ -1,14 +1,17 @@
 var config = require('./app/config');
-var koa = require('koa');
-var app = koa();
-var r = require('rethinkdbdash')();
+var app = require('koa')();
+var middilewares = require('./app/middlewares');
+var router = require('./app/routes')();
 
-app.use(function * () {
-    var users =  r.db('chat').table('users').changes().run(function (error, cursor) {
-        console.log(cursor.length);
-    });
-    this.response.type = 'application/json';
-    this.response.body = users;
+middilewares(app);
+
+app.use(function *(next) {
+    this.response.type = 'text/html';
+
+    yield next;
 });
+
+app.use(router.routes());
+app.use(router.allowedMethods());
 
 app.listen(config.api.port);

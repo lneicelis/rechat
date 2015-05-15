@@ -18,7 +18,9 @@
   "license": "MIT",
   "dependencies": {
     "koa": "^0.20.0",
+    "koa-body": "^1.2.1",
+    "koa-router": "^4.3.2",
     "lodash": "^3.8.0",
-    "rethinkdbdash": "^2.0.9"
+    "thinky": "^2.0.2"
   }
 }
