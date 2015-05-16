@@ -1,9 +1,15 @@
-var thinky = require('thinky')();
-var type = thinky.type;
+var Model = require('./Model');
 
-var User = thinky.createModel('users', {
-    username: type.string().required().min(2),
-    external_id: type.string()
-});
+var User = function () {
+    this.table = 'users';
+    this.fillable = ['username', 'token', 'external_id']
+
+    if (!this instanceof User) {
+        return new User();
+    }
+};
+
+User.prototype = Object.create(Model.prototype);
+User.prototype.constructor = User;
 
 module.exports = User;

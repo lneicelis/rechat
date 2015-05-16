@@ -1,9 +1,9 @@
 module.exports = {
-    secret: 'asdfsfsadfggg',
+    secret: process.env.APP_SECRET || 'MySecret',
     connection: 'rethinkdb',
     rethinkdb: {
-        port: 111,
-        database: 'rechat'
+        port: 28015,
+        db: process.env.DB_NAME || 'test'
     },
     api: {
         port: 3000
