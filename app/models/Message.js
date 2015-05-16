@@ -1,9 +1,11 @@
-var thinky = require('thinky')();
-var type = thinky.type;
+var Model = require('./Model');
 
-var Message = thinky.createModel('messages', {
-    username: type.string().required(),
-    message: type.string().required()
-});
+var Message = function () {
+    this.table = 'messages';
+    this.fillable = ['username', 'message', 'timestamp'];
+};
+
+Message.prototype = Model.prototype;
+Message.prototype.constructor = Message;
 
 module.exports = Message;

@@ -11,13 +11,13 @@ exports.listUsers = function *listUsers () {
 exports.getUser = function *getUser () {
     var user = yield User.find(this.params.userId);
 
-    this.respond((user.getProps()));
+    this.respond(user.getProps());
 };
 
 exports.createUser = function *createUser () {
     var user = yield User.insert(this.request.body);
 
-    this.respond(user);
+    this.respond({userId: user.generated_keys[0]});
 };
 
 exports.updateUser = function *updateUser () {

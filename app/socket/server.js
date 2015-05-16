@@ -1,7 +1,7 @@
 var config = require('../config');
 var socketio = require('socket.io');
 var jwt = require('jsonwebtoken');
-var User = require('../models/User');
+var User = new (require('../models/User'))();
 var Pool = require('./Pool');
 var Connection = require('./Connection');
 
@@ -27,8 +27,8 @@ function attachSocket (server) {
 
         connection = new Connection(socket);
 
-        User.get(claim.userId).run().then(function (user) {
-            connection.joinChat(user);
+        User.find(claim.userId).then(function (user) {
+            connection.joinChat(user.getProps());
             pool.addConnection(connection);
         }, function () {
             connection = null;
@@ -36,6 +36,7 @@ function attachSocket (server) {
 
         socket.on('disconnect', function () {
             pool.removeConnection(connection);
+            connection = null;
         });
     });
 }

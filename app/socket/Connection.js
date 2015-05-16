@@ -1,4 +1,4 @@
-var Message = require('../models/Message');
+var Message = new (require('../models/Message'))();
 
 var Connection = function (socket) {
     this.socket = socket;
@@ -23,13 +23,11 @@ Connection.prototype.disconnect = function () {
  * @param {Object} data
  */
 Connection.prototype.postMessage = function (data) {
-    var message = new Message({
+    Message.insert({
         username: this.user.username,
         message: data.message,
         timestamp: (new Date).getTime()
     });
-
-    message.save();
 };
 
 /**
