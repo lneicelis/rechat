@@ -1,7 +1,9 @@
-var User = require('../models/User');
+var config = require('../../config');
+var User = require('../../models/User');
+var jwt = require('jsonwebtoken');
 
 exports.listUsers = function *listUsers () {
-    var users = yield User.run();
+    var users = yield User.getJoin().run();
 
     this.respond(users);
 };
@@ -15,7 +17,7 @@ exports.getUser = function *getUser () {
 exports.createUser = function *createUser () {
     var user = new User(this.request.body);
 
-    user = yield user.save();
+    user = yield user.saveAll();
 
     this.respond(user);
 };
@@ -33,5 +35,13 @@ exports.deleteUser = function *deleteUser () {
 
     user = yield user.delete();
 
-    this.respond({success: !user.isSaved()});
+    this.respond({success: user.isSaved()});
+};
+
+exports.getAuthorizationToken = function *getAuthorizationToken () {
+    var user = yield User.get(this.params.userId).run();
+    var token = jwt.sign({userId: user.id}, config.secret);
+    user.merge({token: token, tokenUpdatedAt: (new Date).getTime()}).save();
+
+    this.respond({token: token});
 };

@@ -6,6 +6,6 @@ module.exports = {
         database: 'rechat'
     },
     api: {
-        port: 3001
+        port: 3000
     }
 };

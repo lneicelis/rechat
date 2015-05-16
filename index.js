@@ -1,17 +1,9 @@
 var config = require('./app/config');
-var app = require('koa')();
-var middilewares = require('./app/middlewares');
-var router = require('./app/routes')();
+var http = require('http');
+var apiServer = require('./app/http/server');
+var socket = require('./app/socket/server');
 
-middilewares(app);
+var server = apiServer.boot(http);
+socket.attachTo(server);
 
-app.use(function *(next) {
-    this.response.type = 'text/html';
-
-    yield next;
-});
-
-app.use(router.routes());
-app.use(router.allowedMethods());
-
-app.listen(config.api.port);
+server.listen(config.api.port);
