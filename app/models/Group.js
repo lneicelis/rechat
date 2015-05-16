@@ -1,11 +1,11 @@
-var thinky = require('thinky')();
-var type = thinky.type;
-var User = require('./User');
+var _ = require('lodash');
+var Model = require('./Model');
 
-var Group = thinky.createModel('groups', {
-    title: type.string()
-});
+var Group = function () {
+    this.table = 'groups';
+};
 
-Group.hasAndBelongsToMany(User, 'groups_users', 'group_id', 'user_id');
+Group.prototype = Object.create(Model.prototype);
+Group.prototype.constructor = Group;
 
 module.exports = Group;
