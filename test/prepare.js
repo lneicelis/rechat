@@ -12,4 +12,6 @@ r.dbList().run().then(function (array) {
     }
 });
 
-process.exit();
+setTimeout(function () {
+    process.exit();
+}, 10000);
