@@ -1,12 +1,12 @@
 var Model = require('./Model');
 
-var User = function () {
-    this.table = 'users';
-    this.fillable = ['username', 'token', 'external_id']
+var User = function (data) {
+    this.describe({
+        table: 'users',
+        readable: ['id']
+    });
 
-    if (!this instanceof User) {
-        return new User();
-    }
+    this.fill(data);
 };
 
 User.prototype = Object.create(Model.prototype);

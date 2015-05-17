@@ -11,7 +11,7 @@ exports.listUsers = function *listUsers () {
 exports.getUser = function *getUser () {
     var user = yield User.find(this.params.userId);
 
-    this.respond(user.getProps());
+    this.respond(user);
 };
 
 exports.createUser = function *createUser () {
