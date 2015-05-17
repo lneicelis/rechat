@@ -1,8 +1,10 @@
 var Model = require('./Model');
 
 var Message = function () {
-    this.table = 'messages';
-    this.fillable = ['username', 'message', 'timestamp'];
+    this.describe({
+        table: 'messages',
+        readable: ['id']
+    });
 };
 
 Message.prototype = Model.prototype;

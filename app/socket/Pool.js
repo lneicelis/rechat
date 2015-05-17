@@ -1,5 +1,6 @@
 var _ = require('lodash');
 var r = require('rethinkdbdash')();
+var logger = require('../logger');
 
 var Pool = function () {
     this.connections = [];
@@ -15,7 +16,7 @@ var Pool = function () {
 Pool.prototype.addConnection = function (connection) {
     this.connections.push(connection);
 
-    console.log('Current connection count: ' + this.connections.length);
+    logger.debug('Current connection count: ' + this.connections.length);
 
     return this;
 };
@@ -32,18 +33,18 @@ Pool.prototype.removeConnection = function (connection) {
         connection.disconnect();
     }
 
-    console.log('Current connection count: ' + this.connections.length);
+    logger.debug('Current connection count: ' + this.connections.length);
 
     return this;
 };
 
 Pool.prototype.subscribeChanges = function (err, cursor) {
-    (err && console.log('Error 101', err));
+    (err && logger.error('Error 101', err));
 
     if (err || !cursor) return;
 
     cursor.each(function (err, row) {
-        (err && console.log('Error 111', err));
+        (err && logger.error('Error 111', err));
 
         if (null === row.old_val) {
             _.forEach(this.connections, function (connection) {

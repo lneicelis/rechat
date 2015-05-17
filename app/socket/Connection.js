@@ -1,3 +1,4 @@
+var logger = require('../logger');
 var Message = new (require('../models/Message'))();
 
 var Connection = function (socket) {
@@ -10,13 +11,13 @@ var Connection = function (socket) {
 Connection.prototype.joinChat = function (user) {
     this.user = user;
 
-    console.log(this.user.username + ' have joined the chat.');
+    logger.debug('%s have joined the chat.', this.user.username);
 
     this.socket.on('messages:post', this.postMessage.bind(this));
 };
 
 Connection.prototype.disconnect = function () {
-    console.log(this.user.username + ' have left the chat.');
+    logger.debug(this.user.username + ' have left the chat.');
 };
 
 /**
@@ -35,7 +36,7 @@ Connection.prototype.postMessage = function (data) {
  */
 Connection.prototype.publishMessage = function (message) {
     this.socket.emit('messages:posted', message);
-    console.log('messages:posted', message);
+    logger.debug('messages:posted', message);
 };
 
 module.exports = Connection;

@@ -1,4 +1,5 @@
 var config = require('../config');
+var logger = require('../logger');
 var socketio = require('socket.io');
 var jwt = require('jsonwebtoken');
 var User = new (require('../models/User'))();
@@ -18,25 +19,25 @@ function attachSocket (server) {
         var claim = jwt.decode(token, config.secret);
         var connection;
 
-        console.log('>>>> user Connected!');
-        if (null === jwt.decode(token, config.secret)) {
-            console.log('not authorized!');
+        logger.debug('User Connected!');
+        if (null === claim || !claim.userId) {
+            logger.warn('not authorized!');
 
             return;
         }
 
-        connection = new Connection(socket);
-
+        logger.debug('User ID: %s', claim.userId);
         User.find(claim.userId).then(function (user) {
-            connection.joinChat(user.getProps());
+            connection = new Connection(socket);
+            connection.joinChat(user);
             pool.addConnection(connection);
-        }, function () {
-            connection = null;
-        });
 
-        socket.on('disconnect', function () {
-            pool.removeConnection(connection);
-            connection = null;
+            socket.on('disconnect', function () {
+                pool.removeConnection(connection);
+                connection = null;
+            });
+        }, function (err) {
+            logger.warn('User not found! %s', err);
         });
     });
 }

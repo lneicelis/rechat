@@ -1,6 +1,7 @@
 var config = require('../config');
 var r = require('rethinkdbdash')(config.rethinkdb);
 var _ = require('lodash');
+var logger = require('../logger');
 
 var Model = function () {
 
@@ -72,7 +73,12 @@ Model.prototype.delete = function (id) {
 Model.prototype.find = function (id) {
     return new Promise(function (resolve, reject) {
         this.query().get(id).run(function (err, record) {
-            (err && reject(err));
+            if (err || !record) {
+                (err && logger.error(err));
+                (!record && logger.warn('Model with ID: %s not found!', id));
+
+                reject(err || 'Record not found!');
+            }
 
             resolve(this.setProps(record));
         }.bind(this), function (err) {
