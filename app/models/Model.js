@@ -6,7 +6,6 @@ var logger = require('../logger');
 var Model = function () {
 
 };
-
 Model.prototype.describe = function (desc) {
     Object.defineProperty(this, '_table', {
         configurable: false,
@@ -85,6 +84,32 @@ Model.prototype.find = function (id) {
             reject(err);
         }.bind(this));
     }.bind(this));
+};
+
+Model.prototype.fetchJoin = function (query, model, direction) {
+    return new Promise(function (resolve, reject) {
+        var instance;
+        var models = [];
+        var direction = 'right' || direction;
+
+        if (model && _.isFunction(model)) {
+            instance = new (model)();
+        }
+
+        query.run(function (err, records) {
+            (err && reject(err) && logger.warn('fetchFromRight failed!'));
+
+            records.forEach(function (record) {
+                if (instance && instance instanceof Model) {
+                    models.push((new (model)()).setProps(record[direction]));
+                } else {
+                    models.push(record[direction])
+                }
+            });
+
+            resolve(models);
+        }.bind(this));
+    });
 };
 
 module.exports = Model;

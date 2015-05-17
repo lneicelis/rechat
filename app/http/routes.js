@@ -22,6 +22,11 @@ module.exports = function appRoutes () {
     router.put('/groups/:groupId', koaBody, groupsCtrl.updateGroup);
     router.delete('/groups/:groupId', koaBody, groupsCtrl.deleteGroup);
 
+    // Group users routes
+    var groupsUsersCtrl = require('./controllers/groupUsersCtrl');
+    router.get('/groups/:groupId/users', koaBody, groupsUsersCtrl.getGroupUsers);
+    router.post('/groups/:groupId/users/:userId', koaBody, groupsUsersCtrl.addGroupUser);
+    router.delete('/groups/:groupId/users/:userId', koaBody, groupsUsersCtrl.removeGroupUser);
 
     return router;
 };
