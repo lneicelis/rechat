@@ -10,6 +10,6 @@ before_install:
 install:
   - npm install
 before_script:
-  - sudo rethinkdb
+  - rethinkdb --daemon
 script:
   - npm run test
