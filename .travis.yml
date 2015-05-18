@@ -8,8 +8,6 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install rethinkdb
   - rethinkdb --daemon
-install:
-  - npm install
 before_script:
   - DB_NAME=test iojs test/prepare.js
 script:

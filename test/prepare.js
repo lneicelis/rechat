@@ -18,12 +18,12 @@ r.dbList().run().then(function (array) {
 
     promise.then(function () {
         console.log('Tables successfully created');
-        process.exit();
+        process.exit(0);
     }, function (err) {
         console.log('Failed while creating tables', err);
-        process.exit(err);
+        process.exit(1);
     });
 }, function (err) {
     console.log(err);
-    process.exit();
+    process.exit(1);
 });
