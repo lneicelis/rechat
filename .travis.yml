@@ -8,6 +8,7 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install rethinkdb
   - rethinkdb --daemon
+  - npm install -g node-gyp
 before_script:
   - DB_NAME=test iojs test/prepare.js
 script:
