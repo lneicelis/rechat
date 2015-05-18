@@ -6,7 +6,7 @@ module.exports = {
     },
     rethinkdb: {
         port: 28015,
-        db: process.env.DB_NAME || 'test'
+        db: process.env.DB_NAME || 'rechat'
     },
     api: {
         port: 3000
