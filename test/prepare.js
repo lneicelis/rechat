@@ -5,8 +5,8 @@ var r = require('rethinkdbdash')(config.rethinkdb);
 
 r.dbList().run().then(function (array) {
     if (array.indexOf(config.rethinkdb.db) > -1) {
-        console.log('Table already exists');
-        process.exit(1);
+        console.log('Dropping database');
+        r.dbDrop(config.rethinkdb.db).run();
     }
 
     var promise = Promise.all([
@@ -24,6 +24,6 @@ r.dbList().run().then(function (array) {
         process.exit(1);
     });
 }, function (err) {
-    console.log(err);
+    console.log('Failed to list databases.');
     process.exit(1);
 });
