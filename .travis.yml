@@ -7,10 +7,10 @@ before_install:
   - wget -qO- http://download.rethinkdb.com/apt/pubkey.gpg | sudo apt-key add -
   - sudo apt-get update
   - sudo apt-get install rethinkdb
+  - rethinkdb --daemon
 install:
   - npm install
 before_script:
-  - rethinkdb --daemon
   - DB_NAME=test iojs test/prepare.js
 script:
   - DB_NAME=test iojs node_modules/mocha/bin/mocha test/**/*.spec.js --harmony
