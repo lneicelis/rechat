@@ -13,4 +13,4 @@ before_script:
   - rethinkdb --daemon
   - DB_NAME=test iojs test/prepare.js
 script:
-  - npm run test
+  - DB_NAME=test iojs node_modules/mocha/bin/mocha test/**/*.spec.js --harmony
