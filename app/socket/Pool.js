@@ -1,7 +1,10 @@
-var _ = require('lodash');
 var r = require('rethinkdbdash')();
 var logger = require('../logger');
 
+/**
+ * TODO: inject logger, remove hardcoded dependency of r
+ * @constructor
+ */
 var Pool = function () {
     this.connections = [];
 
@@ -22,7 +25,7 @@ Pool.prototype.addConnection = function (connection) {
 };
 
 /**
- * @param connection
+ * @param {Connection} connection
  * @returns {Pool}
  */
 Pool.prototype.removeConnection = function (connection) {
@@ -38,6 +41,10 @@ Pool.prototype.removeConnection = function (connection) {
     return this;
 };
 
+/**
+ * @param {Object} err
+ * @param {Object} cursor
+ */
 Pool.prototype.subscribeChanges = function (err, cursor) {
     (err && logger.error('Error 101', err));
 
@@ -46,8 +53,8 @@ Pool.prototype.subscribeChanges = function (err, cursor) {
     cursor.each(function (err, row) {
         (err && logger.error('Error 111', err));
 
-        if (null === row.old_val) {
-            _.forEach(this.connections, function (connection) {
+        if (null === row.old_val && row.new_val) {
+            this.connections.forEach(function (connection) {
                 connection.publishMessage(row.new_val);
             });
         }
