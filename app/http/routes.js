@@ -8,6 +8,7 @@ module.exports = function appRoutes () {
 
     router.get('/users', koaBody, usersCtrl.listUsers);
     router.get('/users/:userId', koaBody, usersCtrl.getUser);
+    router.get('/users/:userId/groups', koaBody, usersCtrl.getUserGroups);
     router.get('/users/:userId/token', koaBody, usersCtrl.getAuthorizationToken);
     router.post('/users', koaBody, usersCtrl.createUser);
     router.put('/users/:userId', koaBody, usersCtrl.updateUser);

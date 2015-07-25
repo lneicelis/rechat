@@ -14,6 +14,13 @@ exports.getUser = function *getUser () {
     this.respond(user);
 };
 
+exports.getUserGroups = function *getUserGroups () {
+    var user = yield User.find(this.params.userId);
+    var groups = yield user.getGroups();
+
+    this.respond(groups);
+};
+
 exports.createUser = function *createUser () {
     var user = yield User.insert(this.request.body);
 
