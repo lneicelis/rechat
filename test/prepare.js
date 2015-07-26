@@ -14,6 +14,7 @@ co(function* () {
     yield r.dbCreate(config.rethinkdb.db).run();
 
     console.log('Creating tables.');
+    yield r.db(config.rethinkdb.db).tableCreate('messages').run();
     yield r.db(config.rethinkdb.db).tableCreate('users').run();
     yield r.db(config.rethinkdb.db).tableCreate('groups').run();
     yield r.db(config.rethinkdb.db).tableCreate('groups_users').run();
