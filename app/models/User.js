@@ -2,7 +2,16 @@ var Model = require('./Model');
 var config = require('../config');
 var r = require('rethinkdbdash')(config.rethinkdb);
 
+/**
+ * @param data
+ * @returns {User}
+ * @constructor
+ */
 var User = function (data) {
+    if (!(this instanceof User)) {
+        return new User(data);
+    }
+
     this.describe({
         table: 'users',
         readable: ['id']
