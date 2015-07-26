@@ -1,4 +1,5 @@
-var r = require('rethinkdbdash')();
+var config = require('../config');
+var r = require('rethinkdbdash')(config.rethinkdb);
 var logger = require('../logger');
 
 /**
@@ -42,6 +43,8 @@ Pool.prototype.removeConnection = function (connection) {
 };
 
 /**
+ * TODO: move this logic somewhere else
+ *
  * @param {Object} err
  * @param {Object} cursor
  */
@@ -50,11 +53,16 @@ Pool.prototype.subscribeChanges = function (err, cursor) {
 
     if (err || !cursor) return;
 
+    logger.debug('Connection pool have subscribed to changes');
+
     cursor.each(function (err, row) {
         (err && logger.error('Error 111', err));
 
+        logger.debug('Message received by cursor');
+
         if (null === row.old_val && row.new_val) {
             this.connections.forEach(function (connection) {
+                logger.debug('Publishing message to connections');
                 connection.publishMessage(row.new_val);
             });
         }

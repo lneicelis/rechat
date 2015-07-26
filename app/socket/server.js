@@ -29,13 +29,17 @@ function attachSocket (server) {
         logger.debug('User ID: %s', claim.userId);
         User.find(claim.userId).then(function (user) {
             connection = new Connection(socket);
-            connection.joinChat(user);
-            pool.addConnection(connection);
 
-            socket.on('disconnect', function () {
-                pool.removeConnection(connection);
-                connection = null;
-            });
+            connection
+                .connectWith(user)
+                .then(function () {
+                    pool.addConnection(connection);
+
+                    socket.on('disconnect', function () {
+                        pool.removeConnection(connection);
+                        connection = null;
+                    });
+                });
         }, function (err) {
             logger.warn('User not found! %s', err);
         });
