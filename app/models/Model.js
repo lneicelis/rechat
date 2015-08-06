@@ -1,4 +1,4 @@
-/* global require */
+
 
 var r = require('../container').r;
 var _ = require('lodash');

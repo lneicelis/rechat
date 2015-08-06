@@ -12,4 +12,5 @@ before_install:
 before_script:
   - DB_NAME=test iojs test/prepare.js
 script:
+  - DB_NAME=test iojs index.js --harmony &
   - DB_NAME=test iojs node_modules/mocha/bin/mocha test/**/*.spec.js --harmony

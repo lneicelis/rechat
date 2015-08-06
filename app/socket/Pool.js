@@ -9,7 +9,8 @@ var logger = require('../logger');
 var Pool = function () {
     this.connections = [];
 
-    r.table('messages').changes().run({cursor: true}, this.subscribeChanges.bind(this));
+    r.table('messages').changes().run({cursor: true}, this.subscribeMessagesChanges.bind(this));
+    r.table('groups_users').changes().run({cursor: true}, this.subscribeGroupsUsersChanges.bind(this));
 };
 
 /**
@@ -48,12 +49,12 @@ Pool.prototype.removeConnection = function (connection) {
  * @param {Object} err
  * @param {Object} cursor
  */
-Pool.prototype.subscribeChanges = function (err, cursor) {
+Pool.prototype.subscribeMessagesChanges = function (err, cursor) {
     (err && logger.error('Error 101', err));
 
     if (err || !cursor) return;
 
-    logger.debug('Connection pool have subscribed to changes');
+    logger.debug('Connection pool have subscribed to messages changes');
 
     cursor.each(function (err, row) {
         (err && logger.error('Error 111', err));
@@ -67,6 +68,28 @@ Pool.prototype.subscribeChanges = function (err, cursor) {
             });
         }
     }.bind(this));
+};
+
+Pool.prototype.subscribeGroupsUsersChanges = function (err, cursor) {
+    (err && logger.error('Error 102', err));
+
+    if (err || !cursor) return;
+
+    logger.debug('Connection pool have subscribed to groups users changes');
+
+    cursor.each(function (err, row) {
+        (err && logger.error('Error 111', err));
+
+        logger.debug('Message received by cursor');
+
+        console.log(row);
+        if (null === row.old_val && row.new_val) {
+            this.connections.forEach(function (connection) {
+                logger.debug('Publishing message to connections');
+                connection.joinedGroup(row.new_val.userId, row.new_val.groupId);
+            });
+        }
+    }.bind(this))
 };
 
 module.exports = Pool;

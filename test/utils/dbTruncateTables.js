@@ -1,6 +1,6 @@
 var config = require('../../app/config');
 var co = require('co');
-var r = require('rethinkdbdash')(config.rethinkdb);
+var r = require('../../app/container').r;
 
 module.exports = function () {
     return co(function* () {
@@ -9,7 +9,7 @@ module.exports = function () {
 
         tables.forEach(function (table) {
             console.log('Truncating ' + table);
-            promises.push(r.db(config.rethinkdb.db).delete(table).run);
+            promises.push(r.db(config.rethinkdb.db).table(table).delete().run());
         });
 
         yield Promise.all(promises);

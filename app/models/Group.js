@@ -5,6 +5,10 @@ var Model = require('./Model');
 var User = require('./User');
 
 var Group = function (data) {
+    if (!(this instanceof Group)) {
+        return new Group(data);
+    }
+
     this.describe({
         table: 'groups'
     });

@@ -38,6 +38,7 @@ Connection.prototype.disconnect = function () {
  * @param {Object} data
  */
 Connection.prototype.postMessage = function (data) {
+    logger.debug('Trying to post a message to group %s', data.groupId);
     if (!data || !data.groupId || this.groups.indexOf(data.groupId) < 0) {
         logger.debug('Error: User cannot write to this group');
 
@@ -58,6 +59,29 @@ Connection.prototype.postMessage = function (data) {
 Connection.prototype.publishMessage = function (message) {
     this.socket.emit('messages:posted', message);
     logger.debug('messages:posted', message);
+};
+
+/**
+ * @param {number} userId
+ * @param {number} groupId
+ */
+Connection.prototype.joinedGroup = function (userId, groupId) {
+    if (this.user.id === userId && this.groups.indexOf(groupId) === -1) {
+        logger.debug('user ' + userId + 'added to group ' + groupId);
+        this.groups.push(groupId);
+    }
+};
+
+/**
+ * @param {number} userId
+ * @param {number} groupId
+ */
+Connection.prototype.leftGroup = function (userId, groupId) {
+    var index = this.groups.indexOf(groupId);
+
+    if (this.user.id === userId && index > -1) {
+        this.groups.splice(index, 1);
+    }
 };
 
 module.exports = Connection;

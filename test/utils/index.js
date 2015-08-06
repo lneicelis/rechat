@@ -2,5 +2,6 @@
 
 module.exports = {
     dbCleanUp: require('./dbCleanUp'),
-    dbTruncateTables: require('./dbTruncateTables')
+    dbTruncateTables: require('./dbTruncateTables'),
+    fixturesManager: require('./fixturesManager')
 };

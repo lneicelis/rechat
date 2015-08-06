@@ -1,6 +1,6 @@
 /* global describe, it, beforeEach */
 
-var Connection = require('../../app/socket/Connection');
+var Connection = require('../../../app/socket/Connection');
 var expect = require('expect.js');
 var sinon = require('sinon');
 

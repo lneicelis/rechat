@@ -1,6 +1,6 @@
 /* global describe, it, beforeEach */
 
-var Pool = require('../../app/socket/Pool');
+var Pool = require('../../../app/socket/Pool');
 var expect = require('expect.js');
 var sinon = require('sinon');
 
@@ -46,7 +46,7 @@ describe('Socket connection pool', function () {
             }
         };
 
-        pool.subscribeChanges(err, cursor);
+        pool.subscribeMessagesChanges(err, cursor);
 
         callback(err, {
             old_val: null,
