@@ -35,25 +35,4 @@ describe('Socket connection pool', function () {
         expect(pool.connections.length).to.be(0);
         expect(connection.disconnect.called).to.be(true);
     });
-
-    it('should publish message to the connections', function () {
-        pool.addConnection(connection);
-
-        var err, callback;
-        var cursor = {
-            each: function (cb) {
-                callback = cb;
-            }
-        };
-
-        pool.subscribeMessagesChanges(err, cursor);
-
-        callback(err, {
-            old_val: null,
-            new_val: 'newMsg'
-        });
-
-        expect(connection.publishMessage.calledWith('newMsg')).to.be(true);
-    });
-
 });
