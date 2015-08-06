@@ -1,5 +1,6 @@
-var config = require('../config');
-var r = require('rethinkdbdash')(config.rethinkdb);
+/* global require */
+
+var r = require('../container').r;
 var _ = require('lodash');
 var logger = require('../logger');
 

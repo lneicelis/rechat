@@ -1,7 +1,8 @@
+/* global require */
+
+var r = require('../container').r;
 var Model = require('./Model');
 var User = require('./User');
-var config = require('../config');
-var r = require('rethinkdbdash')(config.rethinkdb);
 
 var Group = function (data) {
     this.describe({

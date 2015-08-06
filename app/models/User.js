@@ -1,6 +1,7 @@
+/* global require */
+
+var r = require('../container').r;
 var Model = require('./Model');
-var config = require('../config');
-var r = require('rethinkdbdash')(config.rethinkdb);
 
 /**
  * @param data
