@@ -1,3 +1,5 @@
+/* globals require, module*/
+
 var config = require('./config');
 var r = require('rethinkdbdash');
 

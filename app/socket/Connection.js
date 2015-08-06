@@ -1,5 +1,8 @@
+/* global require, module*/
+
 var logger = require('../logger');
 var Message = new (require('../models/Message'))();
+var adapter = require('../adapters/rethinkDbAdapter');
 
 /**
  * @param {Object} socket
@@ -9,6 +12,18 @@ var Connection = function (socket) {
     this.socket = socket;
     this.user = null;
     this.groups = null;
+
+    adapter.newMessages.subscribe(this.publishMessage.bind(this));
+
+    adapter.addedUsers.subscribe(function (groupUser) {
+        logger.debug('addedUsers', groupUser);
+        this.joinedGroup(groupUser.userId, groupUser.groupId);
+    }.bind(this));
+
+    adapter.removedUsers.subscribe(function (groupUser) {
+        logger.debug('removedUsers', groupUser);
+        this.leftGroup(groupUser.userId, groupUser.groupId);
+    }.bind(this));
 };
 
 /**
@@ -51,14 +66,18 @@ Connection.prototype.postMessage = function (data) {
         message: data.message,
         timestamp: (new Date).getTime()
     });
+    logger.debug('Success: User posted a message.');
 };
 
 /**
  * @param {Object} message
  */
 Connection.prototype.publishMessage = function (message) {
+    if (this.groups.indexOf(message.groupId) === -1) {
+        return;
+    }
+
     this.socket.emit('messages:posted', message);
-    logger.debug('messages:posted', message);
 };
 
 /**
@@ -70,6 +89,11 @@ Connection.prototype.joinedGroup = function (userId, groupId) {
         logger.debug('user ' + userId + 'added to group ' + groupId);
         this.groups.push(groupId);
     }
+
+    this.socket.emit('group:userJoined', {
+        user: {id: userId},
+        group: {id: groupId}
+    });
 };
 
 /**
@@ -82,6 +106,11 @@ Connection.prototype.leftGroup = function (userId, groupId) {
     if (this.user.id === userId && index > -1) {
         this.groups.splice(index, 1);
     }
+
+    this.socket.emit('group:userLeft', {
+        user: {id: userId},
+        group: {id: groupId}
+    });
 };
 
 module.exports = Connection;

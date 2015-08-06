@@ -25,6 +25,7 @@
     "koa-router": "^4.3.2",
     "lodash": "^3.8.0",
     "rethinkdbdash": "^2.0.10",
+    "rx": "^3.0.0",
     "winston": "^1.0.0"
   },
   "devDependencies": {

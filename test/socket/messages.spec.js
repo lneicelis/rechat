@@ -14,33 +14,28 @@ describe('Socket IO communication', function () {
 
     request = supertest('http://127.0.0.1:3000');
 
-    beforeEach(function (done) {
-        utils.dbTruncateTables()
-            .then(function () {
-                return require('./fixtures/messages')(utils.fixturesManager);
-            })
-            .then(function () {
-                done();
-            }, function (err) {
-                console.log('Unable to load fixtures', err);
-            });
-    });
-
     describe('Post message to a group', function() {
         beforeEach(function (done) {
-            getToken().then(function (params) {
-                socket = io('http://127.0.0.1:3000?token=' + params.token, {
-                    'force new connection': true
-                });
+            utils.dbTruncateTables()
+                .then(function () {
+                    return require('./fixtures/messages')(utils.fixturesManager);
+                })
+                .then(function () {
+                    return getToken();
+                })
+                .then(function (params) {
+                    socket = io('http://127.0.0.1:3000?token=' + params.token, {
+                        'force new connection': true
+                    });
 
-                socket.on('connect', function() {
-                    console.log('Socket connected...');
-                    done();
+                    socket.on('connect', function() {
+                        console.log('Socket connected...');
+                        done();
+                    });
+                    socket.on('disconnect', function() {
+                        console.log('Socket disconnected...');
+                    });
                 });
-                socket.on('disconnect', function() {
-                    console.log('Socket disconnected...');
-                });
-            });
         });
 
         afterEach(function(done) {
